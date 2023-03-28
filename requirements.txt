@@ -1,0 +1,3 @@
+virustotal-python
+requests
+bs4
