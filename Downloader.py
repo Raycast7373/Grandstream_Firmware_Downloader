@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 Grandstream_Devices = ["DP75x", "GDS3702", "GDS3705", "GDS371x", "GRP261x", "GXP2130", "GXP2135", "GXP2140", "GXP2160", "GXP2170", "GXV3370", "WP810_WP822_WP825", "WP820"] # Add Devices here, firmwares that are for multiple devices should be added like "DP75x" instead of the specific model
 EnableVirusScan = False # Only shows you the output from previous scans on Virustotal
-RemoveZIPs = False # Currently broken lol
+RemoveZIPs = True
 
 if EnableVirusScan == True: 
     import virustotal_python
@@ -19,9 +19,6 @@ if EnableVirusScan == True:
 def get_available_versions(grandstream_product_name):
     fw_url_pattern = 'https://firmware.grandstream.com/Release_{}_(.*).zip$'
     strange_url_pattern = 'https://www.grandstream.com/support/firmware/{}-official-firmware'
-    url_base = 'https://www.grandstream.com'
-    url_path = '/support/firmware/'
-    url = url_base + url_path
     global soup
     href = re.compile(fw_url_pattern.format(grandstream_product_name))
     dl_links = soup.find_all('a', href=href)
@@ -53,11 +50,11 @@ if RemoveZIPs == True:
         if item.endswith(".zip"):
             os.remove(item)
 
+# Made it global to make it much faster (Only downloads firmware page once)
 url_base = 'https://www.grandstream.com'
 url_path = '/support/firmware/'
 url = url_base + url_path
 req = requests.get(url)
-
 soup = BeautifulSoup(req.content, 'html.parser')
 
 if EnableVirusScan == True:
@@ -87,7 +84,6 @@ if EnableVirusScan == True:
                 else:
                     with zipfile.ZipFile(filename, 'r') as zip_ref:
                         zip_ref.extractall(extract_dir)    
-                #os.remove(filename)
                 print("Downloaded Latest Version")
             else:
                 print("Latest version already downloaded")
@@ -113,13 +109,13 @@ else:
             else:
                 with zipfile.ZipFile(filename, 'r') as zip_ref:
                     zip_ref.extractall(extract_dir)    
-            #os.remove(filename)
             print("Downloaded Latest Version")
         else:
             print("Latest version already downloaded")
         print(" ")
         
 if RemoveZIPs == True:
+    z.close()
     damnzipfiles = os.listdir()
     for item in damnzipfiles:
         if item.endswith(".zip"):  
