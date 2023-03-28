@@ -6,7 +6,7 @@ import zipfile
 import requests
 from bs4 import BeautifulSoup
 
-Grandstream_Devices = ["DP75x", "GDS3702", "GDS3705", "GDS371x", "GRP261x", "GXP2130", "GXP2135", "GXP2140", "GXP2160", "GXP2170", "GXV3370", "WP810_WP822_WP825", "WP820"]
+Grandstream_Devices = ["DP75x", "GDS3702", "GDS3705", "GDS371x", "GRP261x", "GXP2130", "GXP2135", "GXP2140", "GXP2160", "GXP2170", "GXV3370", "WP810_WP822_WP825", "WP820"] # Add Devices here, firmwares that are for multiple devices should be added like "DP75x" instead of the specific model
 EnableVirusScan = False
 RemoveZIPs = False #Currently broken lol
 
