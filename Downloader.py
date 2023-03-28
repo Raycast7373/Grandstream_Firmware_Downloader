@@ -74,7 +74,8 @@ if EnableVirusScan == True:
                 resp = vtotal.request(f"files/{readable_hash}")
                 pprint(resp.data)
                 z = zipfile.ZipFile(filename)
-                if dir in z.namelist():
+                ledirthing = extract_dir+"/"
+                if ledirthing in z.namelist():
                     with zipfile.ZipFile(filename, 'r') as zip_ref:
                         zip_ref.extractall()
                 else:
@@ -99,7 +100,8 @@ else:
                 os.remove(filename)
             dl_fw(urls[0])
             z = zipfile.ZipFile(filename)
-            if dir in z.namelist():
+            ledirthing = extract_dir+"/"
+            if ledirthing in z.namelist():
                 with zipfile.ZipFile(filename, 'r') as zip_ref:
                     zip_ref.extractall()
             else:
@@ -114,5 +116,5 @@ else:
 if RemoveZIPs == True:
     damnzipfiles = os.listdir()
     for item in damnzipfiles:
-        if item.endswith(".zip"):
+        if item.endswith(".zip"):  
             os.remove(item)
