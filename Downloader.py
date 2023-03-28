@@ -7,10 +7,10 @@ import requests
 from bs4 import BeautifulSoup
 
 Grandstream_Devices = ["DP75x", "GDS3702", "GDS3705", "GDS371x", "GRP261x", "GXP2130", "GXP2135", "GXP2140", "GXP2160", "GXP2170", "GXV3370", "WP810_WP822_WP825", "WP820"] # Add Devices here, firmwares that are for multiple devices should be added like "DP75x" instead of the specific model
-EnableVirusScan = False
-RemoveZIPs = False #Currently broken lol
+EnableVirusScan = False # Only shows you the output from previous scans on Virustotal
+RemoveZIPs = False # Currently broken lol
 
-if EnableVirusScan == True: #Only shows you the output from previous scans on Virustotal
+if EnableVirusScan == True: 
     import virustotal_python
     import hashlib
     from pprint import pprint
@@ -18,19 +18,18 @@ if EnableVirusScan == True: #Only shows you the output from previous scans on Vi
 
 def get_available_versions(grandstream_product_name):
     fw_url_pattern = 'https://firmware.grandstream.com/Release_{}_(.*).zip$'
-    url_base = 'https://www.grandstream.com'
     strange_url_pattern = 'https://www.grandstream.com/support/firmware/{}-official-firmware'
+    url_base = 'https://www.grandstream.com'
     url_path = '/support/firmware/'
     url = url_base + url_path
-    req = requests.get(url)
-    soup = BeautifulSoup(req.content, 'html.parser')
+    global soup
     href = re.compile(fw_url_pattern.format(grandstream_product_name))
     dl_links = soup.find_all('a', href=href)
     if not dl_links:
         url = strange_url_pattern.replace("{}", grandstream_product_name.lower())
         req = requests.get(url)
-        soup = BeautifulSoup(req.content, 'html.parser')
-        dl_links = soup.find_all('a', href=href)
+        milk = BeautifulSoup(req.content, 'html.parser')
+        dl_links = milk.find_all('a', href=href)
         print("What a stupid url lol")
     available_versions = []
     available_version_URLS = []
@@ -53,6 +52,13 @@ if RemoveZIPs == True:
     for item in damnzipfiles:
         if item.endswith(".zip"):
             os.remove(item)
+
+url_base = 'https://www.grandstream.com'
+url_path = '/support/firmware/'
+url = url_base + url_path
+req = requests.get(url)
+
+soup = BeautifulSoup(req.content, 'html.parser')
 
 if EnableVirusScan == True:
     with virustotal_python.Virustotal(API_KEY) as vtotal:
