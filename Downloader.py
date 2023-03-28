@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 Grandstream_Devices = ["DP75x", "GDS3702", "GDS3705", "GDS371x", "GRP261x", "GXP2130", "GXP2135", "GXP2140", "GXP2160", "GXP2170", "GXV3370", "WP810_WP822_WP825", "WP820"]
 EnableVirusScan = False
-RemoveZIPs = True
+RemoveZIPs = False #Currently broken lol
 
 if EnableVirusScan == True: #Only shows you the output from previous scans on Virustotal
     import virustotal_python
